@@ -71,13 +71,12 @@
       
       <div class="flex-1 relative overflow-hidden bg-white m-2 sm:m-4 rounded-lg shadow">
         <iframe 
-          v-if="blobUrl" 
-          :src="blobUrl" 
+          v-if="htmlContent" 
+          :srcdoc="htmlContent" 
           class="absolute inset-0 w-full h-full"
           frameborder="0"
           title="Notebook Results"
           referrerpolicy="no-referrer"
-          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-downloads allow-modals"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         ></iframe>
         
