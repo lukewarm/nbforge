@@ -5,21 +5,23 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/use-regex: "true"
-    # TLS configuration
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"  # Set to "true" if you have TLS configured
-    # For better security
+    # SSL/TLS configuration
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # Performance and security optimizations
     nginx.ingress.kubernetes.io/proxy-body-size: "10m"
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    # Optional: If using cert-manager for automatic SSL certificates
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
   # TLS configuration - uncomment if you have certificates
-  # tls:
-  # - hosts:
-  #   - nbforge.example.com
-  #   secretName: nbforge-tls-secret
+  tls:
+  - hosts:
+    - nbforge.example.com
+    secretName: nbforge-tls  # Secret containing your TLS certificate
   rules:
-  - host: nbforge.example.com  # Replace with your domain or use nbforge.local for testing
+  - host: nbforge.example.com  # Replace with your domain
     http:
       paths:
       - path: /api/v1
@@ -58,25 +60,36 @@ spec:
             port:
               number: 80
 ---
-# If you're using local certificates, create a TLS secret
-# apiVersion: v1
-# kind: Secret
-# metadata:
-#   name: nbforge-tls-secret
-# type: kubernetes.io/tls
-# data:
-#   tls.crt: base64_encoded_cert
-#   tls.key: base64_encoded_key
+# Self-signed TLS Certificate example
+# If you're testing locally, you can create a self-signed certificate:
+# openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=nbforge.example.com"
+# Then create the secret:
+# kubectl create secret tls nbforge-tls --key tls.key --cert tls.crt
+# 
+# For production, use cert-manager with Let's Encrypt for automatic certificate management
+# Install cert-manager:
+# kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.12.0/cert-manager.yaml
 ---
-# ConfigMap for NGINX configuration tuning
+# Nginx Configuration ConfigMap - tune for your environment
+# This gets picked up by the Nginx ingress controller
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: nginx-configuration
   namespace: ingress-nginx
 data:
+  # Performance tuning
   proxy-body-size: "10m"
   proxy-connect-timeout: "300"
   proxy-send-timeout: "300"
   proxy-read-timeout: "300"
-  client-max-body-size: "10m" 
+  client-max-body-size: "10m"
+  
+  # Security settings
+  ssl-protocols: "TLSv1.2 TLSv1.3"
+  ssl-ciphers: "HIGH:!aNULL:!MD5"
+  
+  # Optional: Enable HSTS
+  # hsts: "true"
+  # hsts-include-subdomains: "true"
+  # hsts-max-age: "31536000" 

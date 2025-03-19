@@ -60,7 +60,15 @@ spec:
             port:
               number: 80
 ---
-# Optional: Service account for load balancer controller
+# Optional: IAM policy for Load Balancer Controller reference
+# This policy allows the AWS Load Balancer Controller to manage ALB resources
+# Create this policy with the following command:
+# aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam-policy.json
+# 
+# Policy document can be downloaded from:
+# curl -o iam-policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/main/docs/install/iam_policy.json
+---
+# Service account for the AWS Load Balancer Controller
 apiVersion: v1
 kind: ServiceAccount
 metadata:

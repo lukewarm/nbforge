@@ -28,8 +28,8 @@ kubectl auth can-i create pods --as=system:serviceaccount:default:default
 ### Option 1: External PostgreSQL (Recommended)
 
 1. Set up a PostgreSQL server outside the cluster:
-   - Install PostgreSQL on a dedicated server
-   - Configure network access and firewall rules
+   - Install PostgreSQL on a dedicated server (version 13 or later recommended)
+   - Configure network access and firewall rules to allow connections from your Kubernetes nodes
    - Create a database and user:
 ```sql
 CREATE DATABASE nbforge;
@@ -37,9 +37,20 @@ CREATE USER nbforge WITH PASSWORD 'YOUR_PASSWORD';
 GRANT ALL PRIVILEGES ON DATABASE nbforge TO nbforge;
 ```
 
-2. Update the `backend-secrets` in `backend.yaml`:
+2. Test the connection from your local machine or one of the Kubernetes nodes:
+```bash
+psql -h YOUR_POSTGRES_HOST -U nbforge -d nbforge -c "SELECT version();"
+```
+
+3. Update the `backend-secrets` in `backend.yaml`:
 ```yaml
 DATABASE_URL: "postgresql://nbforge:YOUR_PASSWORD@your-postgres-host:5432/nbforge"
+SECRET_KEY: <base64-encoded-secret-key>
+AWS_ACCESS_KEY_ID: <base64-encoded-access-key>
+AWS_SECRET_ACCESS_KEY: <base64-encoded-secret-key>
+S3_ENDPOINT_URL: "http://your-s3-server:9000"
+ENV: "production"
+CORS_ORIGINS: "https://nbforge.example.com"
 ```
 
 ### Option 2: In-Cluster PostgreSQL
@@ -47,6 +58,7 @@ DATABASE_URL: "postgresql://nbforge:YOUR_PASSWORD@your-postgres-host:5432/nbforg
 1. Deploy PostgreSQL using Helm:
 ```bash
 helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
 helm install nbforge-db bitnami/postgresql \
   --set auth.database=nbforge \
   --set auth.username=nbforge \
@@ -55,9 +67,21 @@ helm install nbforge-db bitnami/postgresql \
   --set primary.persistence.storageClass=standard
 ```
 
-2. Update the `backend-secrets` in `backend.yaml`:
+2. Get the PostgreSQL password if you used a generated password:
+```bash
+export POSTGRES_PASSWORD=$(kubectl get secret --namespace default nbforge-db-postgresql -o jsonpath="{.data.postgres-password}" | base64 -d)
+echo $POSTGRES_PASSWORD
+```
+
+3. Update the `backend-secrets` in `backend.yaml`:
 ```yaml
-DATABASE_URL: "postgresql://nbforge:YOUR_PASSWORD@nbforge-db:5432/nbforge"
+DATABASE_URL: "postgresql://nbforge:YOUR_PASSWORD@nbforge-db-postgresql:5432/nbforge"
+SECRET_KEY: <base64-encoded-secret-key>
+AWS_ACCESS_KEY_ID: <base64-encoded-access-key>
+AWS_SECRET_ACCESS_KEY: <base64-encoded-secret-key>
+S3_ENDPOINT_URL: "http://nbforge-storage:9000"
+ENV: "production"
+CORS_ORIGINS: "https://nbforge.example.com"
 ```
 
 ## Storage Setup
@@ -65,23 +89,32 @@ DATABASE_URL: "postgresql://nbforge:YOUR_PASSWORD@nbforge-db:5432/nbforge"
 ### Option 1: External S3-Compatible Storage (Recommended)
 
 1. Set up an S3-compatible storage service:
-   - MinIO server on a dedicated machine
-   - Ceph Object Gateway
+   - [MinIO server](https://min.io/docs/minio/linux/operations/installation.html) on a dedicated machine
+   - [Ceph Object Gateway](https://docs.ceph.com/en/quincy/radosgw/index.html)
    - Other S3-compatible storage solutions
 
 2. Create a bucket and access credentials:
 ```bash
 # Example using MinIO client
-mc alias set myminio http://your-minio-server:9000 admin YOUR_PASSWORD
-mc mb myminio/nbforge-storage
-mc admin user add myminio nbforge YOUR_ACCESS_KEY YOUR_SECRET_KEY
+wget https://dl.min.io/client/mc/release/linux-amd64/mc
+chmod +x mc
+./mc alias set myminio http://your-minio-server:9000 admin YOUR_PASSWORD
+./mc mb myminio/nbforge-storage
+./mc admin user add myminio nbforge YOUR_ACCESS_KEY YOUR_SECRET_KEY
+./mc admin policy set myminio readwrite user=nbforge
 ```
 
-3. Update the `backend-secrets` in `backend.yaml`:
+3. Test the connection:
+```bash
+./mc ls myminio/nbforge-storage
+```
+
+4. Update the `backend-secrets` in `backend.yaml`:
 ```yaml
 AWS_ACCESS_KEY_ID: <base64-encoded-access-key>
 AWS_SECRET_ACCESS_KEY: <base64-encoded-secret-key>
 S3_ENDPOINT_URL: "http://your-s3-server:9000"
+S3_BUCKET_NAME: "nbforge-storage"
 ```
 
 ### Option 2: In-Cluster MinIO
@@ -89,24 +122,26 @@ S3_ENDPOINT_URL: "http://your-s3-server:9000"
 1. Deploy MinIO using Helm:
 ```bash
 helm repo add minio https://helm.min.io/
+helm repo update
 helm install nbforge-storage minio/minio \
   --set rootUser=admin \
   --set rootPassword=YOUR_PASSWORD \
+  --set persistence.enabled=true \
   --set persistence.size=100Gi \
-  --set persistence.storageClass=standard
+  --set persistence.storageClass=standard \
+  --set resources.requests.memory=1Gi
 ```
 
 2. Create a bucket:
 ```bash
-# Install MinIO client
-kubectl run -i --tty --rm minio-client \
-  --image=minio/mc \
-  --restart=Never \
-  --command -- /bin/sh
+# Port forward MinIO API port
+kubectl port-forward svc/nbforge-storage 9000:9000 &
 
-# Inside the pod
-mc alias set myminio http://nbforge-storage:9000 admin YOUR_PASSWORD
-mc mb myminio/nbforge-storage
+# Install MinIO client
+wget https://dl.min.io/client/mc/release/linux-amd64/mc
+chmod +x mc
+./mc alias set myminio http://localhost:9000 admin YOUR_PASSWORD
+./mc mb myminio/nbforge-storage
 ```
 
 3. Update the `backend-secrets` in `backend.yaml`:
@@ -114,121 +149,75 @@ mc mb myminio/nbforge-storage
 AWS_ACCESS_KEY_ID: <base64-encoded-admin>
 AWS_SECRET_ACCESS_KEY: <base64-encoded-password>
 S3_ENDPOINT_URL: "http://nbforge-storage:9000"
+S3_BUCKET_NAME: "nbforge-storage"
 ```
 
 ## Ingress Setup
 
+### Set up Ingress Controller
+
 1. Install an Ingress Controller (if not already installed):
 ```bash
-# Using Helm
+# Using Helm to install Nginx Ingress Controller
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-helm install ingress-nginx ingress-nginx/ingress-nginx
+helm repo update
+helm install ingress-nginx ingress-nginx/ingress-nginx \
+  --set controller.publishService.enabled=true
 ```
 
-2. Configure SSL/TLS:
-   - Generate SSL certificates (e.g., using Let's Encrypt)
-   - Create a Kubernetes secret:
+2. Wait for the ingress controller to be ready:
 ```bash
-kubectl create secret tls nbforge-tls \
-  --cert=path/to/cert.pem \
-  --key=path/to/key.pem
+kubectl wait --namespace default \
+  --for=condition=ready pod \
+  --selector=app.kubernetes.io/component=controller \
+  --timeout=90s
 ```
 
-3. Update the `ingress.yaml` with your domain and SSL configuration.
-
-## Deployment
-
-### Step 4: Set Up Container Registry (Optional)
-
-You have two options for container registry:
-
-#### Option A: Use Pre-built Images (Recommended)
-If you're using the pre-built images from Docker Hub, you can skip this step and proceed to deployment.
-
-#### Option B: Use a Private Container Registry
-
-1. **Set up your private registry:**
-   - You can use any private container registry (e.g., Harbor, GitLab Container Registry, etc.)
-   - Make sure your registry is accessible from your Kubernetes cluster
-
-2. **Configure Docker to use your registry:**
+3. For bare metal clusters without built-in load balancer support, install MetalLB:
 ```bash
-# Login to your private registry
-docker login your-registry.example.com
+# Install MetalLB for bare metal clusters
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.9/config/manifests/metallb-native.yaml
+
+# Wait for MetalLB to be ready
+kubectl wait --namespace metallb-system \
+  --for=condition=ready pod \
+  --selector=app=metallb \
+  --timeout=90s
+
+# Create an IP address pool for MetalLB (adjust IP range to match your network)
+cat <<EOF | kubectl apply -f -
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: first-pool
+  namespace: metallb-system
+spec:
+  addresses:
+  - 192.168.1.240-192.168.1.250  # Replace with your IP range
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: example
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+  - first-pool
+EOF
 ```
 
-3. **Build and push the images:**
+### Configure SSL/TLS
+
+1. Install cert-manager for automated SSL certificates (recommended for production):
 ```bash
-# Build and push all images
-docker build -t your-registry.example.com/nbforge/backend:$VERSION -f backend/Dockerfile .
-docker push your-registry.example.com/nbforge/backend:$VERSION
-
-docker build -t your-registry.example.com/nbforge/frontend:$VERSION -f frontend/Dockerfile .
-docker push your-registry.example.com/nbforge/frontend:$VERSION
-
-docker build -t your-registry.example.com/nbforge/notebook-runner:$VERSION -f notebook-runner/Dockerfile .
-docker push your-registry.example.com/nbforge/notebook-runner:$VERSION
-```
-
-4. **Update the Kubernetes manifests:**
-Edit `backend.yaml` and `frontend.yaml` to use your registry images:
-```yaml
-# In backend.yaml and frontend.yaml, update the image field:
-image: your-registry.example.com/nbforge/backend:$VERSION  # for backend
-image: your-registry.example.com/nbforge/frontend:$VERSION  # for frontend
-```
-
-5. **Update the notebook runner configuration:**
-Edit `backend-secrets` in `backend.yaml` to point to your custom notebook runner image:
-```yaml
-NOTEBOOK_RUNNER_IMAGE: "your-registry.example.com/nbforge/notebook-runner:$VERSION"
-```
-
-6. **Configure Kubernetes to pull from your registry:**
-```bash
-# Create a secret for registry authentication
-kubectl create secret docker-registry registry-secret \
-    --docker-server=your-registry.example.com \
-    --docker-username=your-username \
-    --docker-password=your-password \
-    --docker-email=your-email@example.com
-
-# Update the service account to use the secret
-kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "registry-secret"}]}'
-```
-
-7. **Verify registry access:**
-```bash
-# Test pulling an image from your registry
-kubectl run test-pull --image=your-registry.example.com/nbforge/backend:$VERSION --image-pull-policy=Always
-```
-
-### Step 5: Configure DNS and SSL
-
-1. **Get the external IP address:**
-```bash
-# Get the external IP of the ingress controller
-export EXTERNAL_IP=$(kubectl get service ingress-nginx-controller -n ingress-nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-```
-
-2. **Configure DNS in Cloudflare:**
-   - Log in to your Cloudflare account
-   - Select your domain
-   - Go to DNS > Records
-   - Add an A record:
-     - Name: nbforge (or your preferred subdomain)
-     - IPv4 address: $EXTERNAL_IP
-     - Proxy status: Proxied (orange cloud)
-
-3. **Create SSL certificate:**
-```bash
-# Create a self-signed certificate (for testing)
-kubectl create secret tls nbforge-tls \
-  --key=tls.key \
-  --cert=tls.crt
-
-# For production, use Let's Encrypt with cert-manager
+# Install cert-manager
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.12.0/cert-manager.yaml
+
+# Wait for cert-manager to be ready
+kubectl wait --namespace cert-manager \
+  --for=condition=ready pod \
+  --selector=app.kubernetes.io/instance=cert-manager \
+  --timeout=90s
 
 # Create a ClusterIssuer for Let's Encrypt
 cat << EOF | kubectl apply -f -
@@ -249,25 +238,162 @@ spec:
 EOF
 ```
 
-### Step 6: Deploy the Application
+2. For development or testing, you can create a self-signed certificate:
+```bash
+# Generate a self-signed certificate
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+  -keyout tls.key -out tls.crt -subj "/CN=nbforge.example.com"
+
+# Create a TLS secret
+kubectl create secret tls nbforge-tls \
+  --key tls.key \
+  --cert tls.crt
+```
+
+3. Update the TLS section in `ingress-self-hosted.yaml`:
+```yaml
+# Uncomment the tls section in ingress-self-hosted.yaml and update with your domain
+```
+
+## Deployment
+
+### Step 4: Set Up Container Registry (Optional)
+
+You have two options for container registry:
+
+#### Option A: Use Pre-built Images (Recommended)
+If you're using the pre-built images from Docker Hub, you can skip this step and proceed to deployment.
+
+#### Option B: Use a Private Container Registry
+
+1. **Set up your private container registry**
+   There are several options for running your own container registry:
+   - [Harbor](https://goharbor.io/) - Enterprise container registry
+   - [Docker Registry](https://docs.docker.com/registry/) - Simple registry server
+   - GitLab/GitHub Container Registry
+
+   Example for a simple Docker Registry deployment:
+   ```bash
+   helm repo add twuni https://helm.twun.io
+   helm repo update
+   helm install docker-registry twuni/docker-registry \
+     --set persistence.enabled=true \
+     --set persistence.size=10Gi
+   
+   # Create basic authentication
+   htpasswd -Bbn reguser password > ./htpasswd
+   kubectl create secret generic registry-auth \
+     --from-file=./htpasswd
+   ```
+
+2. **Configure Docker to use your registry:**
+```bash
+# Login to your private registry
+docker login your-registry.example.com -u reguser -p password
+```
+
+3. **Build and push the images:**
+```bash
+# Set version and registry
+export REGISTRY=your-registry.example.com
+export VERSION=1.0.0
+
+# Build and push all images
+docker buildx build --platform linux/amd64 -t $REGISTRY/nbforge/backend:$VERSION backend/
+docker push $REGISTRY/nbforge/backend:$VERSION
+
+docker buildx build --platform linux/amd64 -t $REGISTRY/nbforge/frontend:$VERSION frontend/
+docker push $REGISTRY/nbforge/frontend:$VERSION
+
+docker buildx build --platform linux/amd64 -t $REGISTRY/nbforge/notebook-runner:$VERSION notebook_runner/
+docker push $REGISTRY/nbforge/notebook-runner:$VERSION
+```
+
+4. **Update the Kubernetes manifests:**
+Edit `backend.yaml` and `frontend.yaml` to use your registry images:
+```yaml
+# In backend.yaml and frontend.yaml, update the image field:
+image: your-registry.example.com/nbforge/backend:$VERSION  # for backend
+image: your-registry.example.com/nbforge/frontend:$VERSION  # for frontend
+```
+
+5. **Update the notebook runner configuration:**
+Edit `backend-config` in `backend.yaml` to point to your custom notebook runner image:
+```yaml
+NOTEBOOK_RUNNER_IMAGE: "your-registry.example.com/nbforge/notebook-runner:$VERSION"
+```
+
+6. **Configure Kubernetes to pull from your private registry:**
+```bash
+# Create a secret for registry authentication
+kubectl create secret docker-registry registry-creds \
+    --docker-server=your-registry.example.com \
+    --docker-username=reguser \
+    --docker-password=password
+
+# Update the service account to use the secret
+kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "registry-creds"}]}'
+```
+
+### Step 5: Deploy the Application
 
 1. Apply the Kubernetes manifests:
 ```bash
-cp backend.yaml.example backend.yaml
+cp ../shared/backend.yaml.example ../shared/backend.yaml
 ```
-Adjust the configruations in `backend.yaml`, `frontend.yaml` and `ingress.yaml`
+Adjust the configurations in `backend.yaml` and `frontend.yaml`
 
 ```bash
-kubectl apply -f backend.yaml
-kubectl apply -f frontend.yaml
-kubectl apply -f ingress.yaml
+kubectl apply -f ../shared/backend.yaml
+kubectl apply -f ../shared/frontend.yaml
 ```
 
-2. Verify the deployment:
+2. Apply the RBAC
+```bash
+kubectl apply -f rbac.yaml
+```
+
+3. Apply the Ingress configuration:
+```bash
+# Update the host value in ingress-self-hosted.yaml to your domain
+kubectl apply -f ingress-self-hosted.yaml
+```
+
+4. Verify the deployment:
 ```bash
 kubectl get pods
 kubectl get services
 kubectl get ingress
+```
+
+### Step 6: Configure DNS
+
+1. **Get the external IP address:**
+```bash
+# Get the external IP of the ingress controller
+export EXTERNAL_IP=$(kubectl get service ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+echo "Your external IP is: $EXTERNAL_IP"
+```
+
+2. **Configure DNS in your provider:**
+   - Log in to your DNS provider account
+   - Create an A record pointing from your domain (nbforge.example.com) to the external IP
+   - DNS settings example:
+     - Type: A
+     - Name: nbforge (or your subdomain)
+     - Value: $EXTERNAL_IP
+     - TTL: 5 minutes (for testing)
+
+3. **For local testing without DNS:**
+   You can add an entry to your `/etc/hosts` file:
+   ```bash
+   echo "$EXTERNAL_IP nbforge.example.com" | sudo tee -a /etc/hosts
+   ```
+
+4. **Test the DNS resolution:**
+```bash
+nslookup nbforge.example.com
+curl -k https://nbforge.example.com
 ```
 
 ### Step 7: Set Up the First Admin Account
@@ -277,7 +403,7 @@ After the deployment is complete, you need to create the first admin account. Yo
 **Using the create_superuser.py script:**
 ```bash
 # Get the backend pod name
-BACKEND_POD=$(kubectl get pod -l app=backend -o jsonpath='{.items[0].metadata.name}')
+export BACKEND_POD=$(kubectl get pod -l app=backend -o jsonpath='{.items[0].metadata.name}')
 
 # Option 1: Create a new admin user (requires password)
 kubectl exec -it $BACKEND_POD -- python /app/scripts/create_superuser.py admin@example.com your_secure_password
@@ -287,6 +413,68 @@ kubectl exec -it $BACKEND_POD -- python /app/scripts/create_superuser.py existin
 ```
 
 After creating the admin account, you can:
-1. Navigate to https://your-domain.com
+1. Navigate to https://nbforge.example.com
 2. Log in with your admin credentials
-3. Access the admin panel at https://your-domain.com/#/admin/users
+3. Access the admin panel at https://nbforge.example.com/#/admin/users
+
+### Step 8: Security Improvements and Monitoring
+
+1. **Use dedicated service accounts for different components:**
+```bash
+# Create separate service accounts
+kubectl create serviceaccount backend-sa
+kubectl create serviceaccount frontend-sa
+kubectl create serviceaccount notebook-runner-sa
+
+# Apply more granular RBAC
+kubectl apply -f fine-grained-rbac.yaml
+```
+
+2. **Update deployments to use these service accounts:**
+```bash
+# Edit the deployment files or use kubectl patch
+kubectl patch deployment backend -p '{"spec":{"template":{"spec":{"serviceAccountName":"backend-sa"}}}}'
+kubectl patch deployment frontend -p '{"spec":{"template":{"spec":{"serviceAccountName":"frontend-sa"}}}}'
+```
+
+3. **Set up network policies to limit pod communications:**
+```bash
+kubectl apply -f network-policies.yaml
+```
+
+4. **Set up monitoring with Prometheus and Grafana (optional):**
+```bash
+# Add Prometheus Helm repo
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+
+# Install kube-prometheus-stack for monitoring
+helm install monitoring prometheus-community/kube-prometheus-stack \
+  --namespace monitoring \
+  --create-namespace \
+  --set grafana.adminPassword=YOUR_ADMIN_PASSWORD
+```
+
+5. **Access Grafana for monitoring:**
+```bash
+# Port-forward the Grafana service
+kubectl port-forward -n monitoring svc/monitoring-grafana 3000:80
+```
+
+Then navigate to `http://localhost:3000` in your browser and log in with:
+- Username: admin
+- Password: YOUR_ADMIN_PASSWORD
+
+### Troubleshooting
+
+- **Issue**: Pods fail to start or stay in pending state
+  - **Solution**: Check pod events and logs with `kubectl describe pod <pod-name>` and `kubectl logs <pod-name>`
+  - **Solution**: Verify that your cluster has sufficient resources with `kubectl describe nodes`
+
+- **Issue**: Ingress not working
+  - **Solution**: Check ingress controller logs with `kubectl logs -l app.kubernetes.io/name=ingress-nginx -n ingress-nginx`
+  - **Solution**: Verify that the ingress definition is correct with `kubectl describe ingress nbforge-ingress`
+
+- **Issue**: Cannot access the application
+  - **Solution**: Check if DNS resolves to the correct IP with `nslookup nbforge.example.com`
+  - **Solution**: Verify that TLS is properly configured with `curl -vk https://nbforge.example.com`

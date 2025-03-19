@@ -382,3 +382,8 @@ After creating the admin account, you can:
 2. Log in with your admin credentials
 3. Access the admin panel at https://nbforge.example.com/#/admin/users
 
+### Step 8: Improvements
+
+In the steps above, we run the server deployments and jobs using the default service account. 
+It is recommended that you run the using service accounts with only the necessary access to your cluster. 
+To do that, please create specific Kubernetes service accounts for different workloads and update the YAML files to use those accounts instead.
