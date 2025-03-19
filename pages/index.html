@@ -366,7 +366,7 @@ with DAG(
                             <ul>
                                 <li>Google Kubernetes Engine (GKE)</li>
                                 <li>Amazon Elastic Kubernetes Service (EKS)</li>
-                                <li>Self-hosted Kubernetes clusters</li>
+                                <li>Self-hosted Kubernetes clusters without any cloud provider dependency, using Postgres and MinIO.</li>
                             </ul>
                         </div>
                         <div class="feature-visual image-visual">
@@ -815,34 +815,32 @@ with DAG(
         display: flex;
         align-items: center;
         gap: 8px;
-        background-color: var(--primary-color);
+        background-color: #4263eb; /* Slightly more saturated blue */
         color: white;
         padding: 12px 24px;
         border-radius: 50px;
         font-weight: 600;
-        box-shadow: 0 4px 20px rgba(var(--primary-rgb), 0.3);
+        box-shadow: 0 4px 20px rgba(66, 99, 235, 0.4);
         transition: all 0.3s ease;
-        animation: pulse 2s infinite;
+        animation: gentle-pulse 3s infinite;
     }
 
     .btn-floating:hover {
         transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(var(--primary-rgb), 0.4);
+        box-shadow: 0 8px 25px rgba(66, 99, 235, 0.5);
+        background-color: #3b5bdb; /* Slightly darker on hover */
         animation: none;
     }
 
-    @keyframes pulse {
+    @keyframes gentle-pulse {
         0% {
-            transform: scale(1);
-            box-shadow: 0 4px 20px rgba(var(--primary-rgb), 0.3);
+            box-shadow: 0 4px 20px rgba(66, 99, 235, 0.3);
         }
         50% {
-            transform: scale(1.05);
-            box-shadow: 0 4px 25px rgba(var(--primary-rgb), 0.5);
+            box-shadow: 0 4px 25px rgba(66, 99, 235, 0.6);
         }
         100% {
-            transform: scale(1);
-            box-shadow: 0 4px 20px rgba(var(--primary-rgb), 0.3);
+            box-shadow: 0 4px 20px rgba(66, 99, 235, 0.3);
         }
     }
 
