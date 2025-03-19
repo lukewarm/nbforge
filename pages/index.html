@@ -19,6 +19,13 @@
             <a href="#" class="logo">
                 <span class="logo-text">nbforge</span>
             </a>
+            <button class="mobile-menu-toggle" aria-label="Toggle mobile menu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
             <div class="nav-links">
                 <a href="#solutions" class="nav-link">Solutions</a>
                 <a href="#features" class="nav-link">Features</a>
@@ -714,10 +721,33 @@ with DAG(
         // Mobile menu toggle
         const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
         const navLinks = document.querySelector('.nav-links');
+        const mobileNavLinks = document.querySelectorAll('.nav-links .nav-link');
         
         if (mobileMenuToggle) {
             mobileMenuToggle.addEventListener('click', function() {
                 navLinks.classList.toggle('active');
+                // Toggle aria-expanded attribute for accessibility
+                const expanded = navLinks.classList.contains('active');
+                mobileMenuToggle.setAttribute('aria-expanded', expanded);
+            });
+            
+            // Close mobile menu when a link is clicked
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    navLinks.classList.remove('active');
+                    mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                });
+            });
+            
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(event) {
+                const isClickInsideMenu = navLinks.contains(event.target);
+                const isClickOnToggle = mobileMenuToggle.contains(event.target);
+                
+                if (navLinks.classList.contains('active') && !isClickInsideMenu && !isClickOnToggle) {
+                    navLinks.classList.remove('active');
+                    mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                }
             });
         }
     });
@@ -1044,15 +1074,24 @@ with DAG(
         color: var(--text-color);
         font-size: 24px;
         cursor: pointer;
+        padding: 8px;
+        border-radius: 4px;
+        transition: background-color 0.2s ease;
+    }
+    
+    .mobile-menu-toggle:hover {
+        background-color: rgba(0, 0, 0, 0.05);
     }
 
     @media (max-width: 768px) {
         .mobile-menu-toggle {
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .nav-links {
-            position: fixed;
+            position: absolute;
             top: 70px;
             left: 0;
             right: 0;
@@ -1061,10 +1100,11 @@ with DAG(
             padding: 20px;
             gap: 15px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            transform: translateY(-100%);
+            transform: translateY(-150%);
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s ease;
+            z-index: 999;
         }
         
         .nav-links.active {
@@ -1076,6 +1116,11 @@ with DAG(
         .nav-link {
             width: 100%;
             text-align: center;
+            padding: 12px;
+        }
+        
+        .nav-link.cta {
+            margin-top: 10px;
         }
     }
 
