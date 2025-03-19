@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+data:
+  ENV: "production"
+  FRONTEND_URL: "http://nbforge.local"
+  API_URL: "http://backend-service:8000/api/v1"
+  S3_BUCKET: "nbforge"
+  S3_ENDPOINT_URL: "http://host.minikube.internal:9000"
+  S3_NOTEBOOK_TEMPLATES_PREFIX: "notebooks"  # Prefix for notebook templates
+  DEMO_MODE: "false"
+  EMAILS_ENABLED: "true"
+  EMAIL_PROVIDER: "smtp"
+  EMAIL_FROM: "accounts@mail.maxhe.org"
+  EMAIL_FROM_NAME: "NBForge"
+  SMTP_HOST: "smtp.mailgun.org"
+  SMTP_PORT: "587"
+  SMTP_USER: "accounts@mail.maxhe.org"
+  SMTP_TLS: "true"
+  KUBERNETES_NAMESPACE: "default"  # The namespace where notebook jobs will be created
+  GLOBAL_EXECUTIONS_RATE_LIMIT: "100"  # Maximum number of executions per hour globally
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: backend-secrets
+type: Opaque
+data:
+  # These are placeholders - users will replace with their actual values
+  # echo -n "your-value" | base64
+  DATABASE_URL: cG9zdGdyZXNxbDovL25iZm9yZ2U6bmJmb3JnZUBob3N0Lm1pbmlrdWJlLmludGVybmFsOjU0MzIvbmJmb3JnZQ== 
+  SECRET_KEY: ZGV2LWp3dC1zZWNyZXQta2V5  # dev-jwt-secret-key
+  AWS_ACCESS_KEY_ID: bWluaW9hZG1pbg==  # minioadmin
+  AWS_SECRET_ACCESS_KEY: bWluaW9hZG1pbg==  # minioadmin
+  SMTP_PASSWORD: eW91ci12YWx1ZQ==
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    app: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+      - name: backend
+        image: nbforge/backend:latest
+        imagePullPolicy: Never  # Use locally built image
+        securityContext:
+          allowPrivilegeEscalation: false
+        ports:
+        - containerPort: 8000
+        envFrom:
+        - configMapRef:
+            name: backend-config
+        - secretRef:
+            name: backend-secrets
+        readinessProbe:
+          httpGet:
+            path: /api/v1/health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: "1"
+            memory: "1Gi"
+          requests:
+            cpu: "200m"
+            memory: "512Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: backend
+  ports:
+  - port: 8000
+    targetPort: 8000
+  type: NodePort  # Use NodePort to allow external access 

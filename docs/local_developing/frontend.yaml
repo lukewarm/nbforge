@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+data:
+  VITE_API_URL: "http://nbforge.local"
+  VITE_APP_NAME: "NBForge (Minikube)"
+  VITE_APP_VERSION: "0.1.0"
+  VITE_ENABLE_AUTH: "true"  
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    app: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: nbforge/frontend:latest
+        imagePullPolicy: Never  # Use locally built image
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: frontend-config
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  selector:
+    app: frontend
+  ports:
+  - port: 80
+    targetPort: 8080
+  type: ClusterIP 

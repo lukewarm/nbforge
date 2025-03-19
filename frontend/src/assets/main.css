@@ -1,0 +1,27 @@
+/* Base styles */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles */
+html, body {
+  @apply antialiased;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Transitions */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+} 

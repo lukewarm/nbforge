@@ -1,0 +1,18 @@
+# Core execution requirements
+papermill>=2.4.0
+nbformat>=5.9.0
+nbconvert>=7.6.0
+ipykernel>=6.25.0
+
+# Parameter handling
+pydantic>=2.4.0
+jsonschema>=4.19.0
+
+# Storage and API interaction
+boto3==1.35.99
+requests>=2.31.0
+
+# Result handling
+markdown>=3.4.0
+python-slugify>=8.0.0
+markdownify>=0.11.0 

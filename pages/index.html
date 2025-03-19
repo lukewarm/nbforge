@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="nbforge - A flexible platform for running notebooks securely with parameter forms for non-technical users">
+    <title>nbforge - A flexible notebook running platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo">
+                <span class="logo-text">nbforge</span>
+            </a>
+            <div class="nav-links">
+                <a href="#solutions" class="nav-link">Solutions</a>
+                <a href="#features" class="nav-link">Features</a>
+                <a href="https://github.com/lukewarm/nbforge" class="nav-link">GitHub</a>
+                <a href="#contact" class="nav-link cta">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Floating Try Demo Button -->
+    <div class="floating-demo-btn">
+        <a href="#" class="btn btn-floating">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3l14 9-14 9V3z"></path></svg>
+            Try Demo
+        </a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Turn your notebooks into production-ready applications</h1>
+                    <p>NBForge is an open-source platform that allows you to run Jupyter notebooks with parameterized inputs, data pipeline integration, and a clean UI for your stakeholders.</p>
+                    <div class="hero-buttons">
+                        <a href="#" class="btn btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M5 3l14 9-14 9V3z"></path></svg>
+                            Try Demo
+                        </a>
+                        <a href="https://github.com/lukewarm/nbforge" class="btn btn-secondary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                            Get Started
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="images/hero_image.png" alt="NBForge dashboard interface" class="placeholder-image">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pain Points/Solutions Section -->
+    <section id="solutions" class="pain-points-section">
+        <div class="pain-points-header">
+            <h2>What's your biggest data science & analytics pain point?</h2>
+            <p class="subtitle">Identify your challenge and discover how NBForge can help</p>
+        </div>
+        
+        <div class="challenge-selector">
+            <div class="challenge-card active">
+                <div class="challenge-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                </div>
+                <h3>Repeatedly Creating Reports for Partners</h3>
+                <p>Tired of generating the same reports over and over for stakeholders who can't run your code?</p>
+            </div>
+            
+            <div class="challenge-card">
+                <div class="challenge-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                </div>
+                <h3>Complex Integrations with Workflow Systems</h3>
+                <p>Struggling to integrate your Jupyter notebooks with production systems and orchestration tools?</p>
+            </div>
+            
+            <div class="challenge-card">
+                <div class="challenge-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                </div>
+                <h3>Long-Running Data Processing Jobs</h3>
+                <p>Need a better way to handle long-running notebooks with proper monitoring and notifications?</p>
+            </div>
+            
+            <div class="challenge-card">
+                <div class="challenge-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="18" r="3"></circle><circle cx="6" cy="6" r="3"></circle><path d="M13 6h3a2 2 0 0 1 2 2v7"></path><line x1="6" y1="9" x2="6" y2="21"></line></svg>
+                </div>
+                <h3>Managing Multiple Notebook Versions</h3>
+                <p>Frustrated with stale notebook copies floating around your team with no central source of truth?</p>
+            </div>
+        </div>
+        
+        <div class="solutions-container">
+            <div class="solution-detail">
+                <div class="solution-content">
+                    <h3>Self-Service Reporting for Product and Engineering Stakeholders</h3>
+                    <p>Stop being the bottleneck for running reports. NBForge creates user-friendly forms from your notebook parameters, allowing business stakeholders to run reports themselves with different inputs.</p>
+                    <ul>
+                        <li><strong>Automatic form generation</strong> from notebook parameters</li>
+                        <li><strong>Shareable links</strong> to interactive HTML reports based on your notebook templates.</li>
+                    </ul>
+                </div>
+                <div class="solution-image">
+                    <img src="images/parameters_form.png" alt="Parameter form interface" class="placeholder-image">
+                </div>
+            </div>
+            
+            <div class="solution-detail hidden">
+                <div class="solution-content">
+                    <h3>Streamlined Production Integration</h3>
+                    <p>NBForge provides a clean API and service architecture to integrate your notebooks with existing production workflows and orchestration tools.</p>
+                    <ul>
+                        <li>Notebook to pipeline task in as little as <strong>30 minutes</strong></li>
+                        <li><strong>REST API</strong> for programmatic control of notebook execution (<a target="_blank" href="https://demo.nbforge.com/docs/">docs site</a>)</li>
+                        <li><strong>Service account support</strong> for system-to-system integration</li>
+                        <li>Compatible with <strong>Airflow, Dagster</strong>, and other orchestrators</li>
+                    </ul>
+                </div>
+                <div class="solution-image">
+                    <img src="images/orchestration_platforms.png" alt="Popular orchestration platforms: airflow, dagster, and prefect" class="placeholder-image">
+                </div>
+            </div>
+            
+            <div class="solution-detail hidden">
+                <div class="solution-content">
+                    <h3>Robust Execution for Long-Running Jobs</h3>
+                    <p>Run complex data processing notebooks reliably with proper monitoring, resource allocation, and failure handling.</p>
+                    <ul>
+                        <li><strong>Asynchronous execution</strong> with status tracking</li>
+                        <li><strong>Email notifications</strong> on completion or failure</li>
+                        <li><strong>Execution history and logs</strong> for debugging</li>
+                        <li><strong>Resource isolation</strong> for secure and stable execution</li>
+                        <li><strong>Resource customization</strong> up to as much CPU and memory as you have available</li>
+                    </ul>
+                </div>
+                <div class="solution-image">
+                    <img src="images/execution_history.png" alt="Execution history" class="placeholder-image">
+                </div>
+            </div>
+            
+            <div class="solution-detail hidden">
+                <div class="solution-content">
+                    <h3>Centralized Notebook Management</h3>
+                    <p>Create a single source of truth for your analytical templates where team members can collaborate effectively.</p>
+                    <ul>
+                        <li>A central analytics platform that encourages <strong>collaboration and reuse</strong></li>
+                        <li>Notebook templates are recommended to be deployed by CI/CD pipelines from <strong>git repositories</strong> into the storage bucket</li>
+                    </ul>
+                </div>
+                <div class="solution-image">
+                    <img src="images/notebook_management.png" alt="Notebook management interface" class="placeholder-image">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section section-alt">
+        <div class="container">
+            <h2>Key Features</h2>
+            
+            <!-- Features table of contents navigation -->
+            <div class="features-toc">
+                <nav class="toc-nav">
+                    <ul>
+                        <li><a href="#execution" class="active">Reliable Execution</a></li>
+                        <li><a href="#python">Python Environment</a></li>
+                        <li><a href="#forms">Parameter Forms</a></li>
+                        <li><a href="#airflow">Airflow Integration</a></li>
+                        <li><a href="#deployment">Flexible Deployment</a></li>
+                        <li><a href="#notifications">Notifications</a></li>
+                        <li><a href="#reports">Shareable Reports</a></li>
+                        <li><a href="#trustworthy">Trustworthy Results</a></li>
+                    </ul>
+                </nav>
+            </div>
+            
+            <!-- Features content - vertically stacked -->
+            <div class="features-content">
+                <!-- Fast Execution -->
+                <div class="feature-card" id="execution">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                        </div>
+                        <h3>Fast, Reliable Notebook Execution</h3>
+                    </div>
+                    <div class="feature-body">
+                        <div class="feature-description">
+                            <p>Execute notebooks with blazing speed using containerized environments that provide consistent, scalable, and reliable results every time.</p>
+                            <ul>
+                                <li>Kubernetes-powered execution for scalability</li>
+                                <li>Real-time status updates and logs</li>
+                                <li>Choose the right amount of CPU and memory for your notebook</li>
+                                <li>Execution history and metrics</li>
+                            </ul>
+                        </div>
+                        <div class="feature-visual code-visual">
+                            <pre><code class="language-json">{
+  "resources": {
+    "cpu_milli": 2000,
+    "memory_mib": 4096
+  }
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Python Environment -->
+                <div class="feature-card" id="python">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+                        </div>
+                        <h3>Customizable Python Environment</h3>
+                    </div>
+                    <div class="feature-body">
+                        <div class="feature-description">
+                            <p>Select specific Python versions and packages for each notebook, ensuring perfect compatibility with your code requirements and dependencies.</p>
+                            <ul>
+                                <li>Choose from Python 3.7 through 3.12</li>
+                                <li>Specify exact package versions</li>
+                                <li>Environment isolation for each execution</li>
+                                <li>Support for custom Docker images</li>
+                            </ul>
+                        </div>
+                        <div class="feature-visual code-visual">
+                            <pre><code class="language-yaml"># library requirements at the notebook level
+"python_version": "3.10",
+"requirements": {
+    "pandas": "==2.0.*",
+    "matplotlib": ">=3.4.0",
+    "scikit-learn": ">=1.4.0"
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Parameter Forms -->
+                <div class="feature-card" id="forms">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                        </div>
+                        <h3>Customizable Parameter Forms</h3>
+                    </div>
+                    <div class="feature-body">
+                        <div class="feature-description">
+                            <p>Automatically generate intuitive parameter forms from notebook metadata, allowing non-technical users to run notebooks with different inputs.</p>
+                            <ul>
+                                <li>Rich form controls (dates, numbers, dropdowns)</li>
+                                <li>Parameter validation and defaults</li>
+                                <li>Easy to implement with simple cell annotations. <strong>No html/javascript required!</strong></li>
+                            </ul>
+                        </div>
+                        <div class="feature-visual image-visual">
+                            <img src="images/parameters_form.png" alt="Parameter form with various input controls" class="placeholder-image">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Airflow Integration -->
+                <div class="feature-card" id="airflow">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                        </div>
+                        <h3>Airflow & Orchestration Integration</h3>
+                    </div>
+                    <div class="feature-body">
+                        <div class="feature-description">
+                            <p>Seamlessly integrate with Airflow and other orchestration tools to incorporate notebooks into your data pipelines and automated workflows.</p>
+                            <ul>
+                                <li>RESTful API for programmatic control</li>
+                                <li>Service account support for system integrations</li>
+                                <li>Webhook callbacks for execution events</li>
+                                <li>Status polling and result retrieval</li>
+                            </ul>
+                        </div>
+                        <div class="feature-visual code-visual">
+                            <pre><code class="language-python"># Airflow DAG example with NBForge integration
+from airflow import DAG
+from airflow.operators.python import PythonOperator
+from datetime import datetime, timedelta
+import requests
+
+def run_nbforge_notebook(**context):
+    api_url = "https://your-nbforge.com/api/v1/notebooks/execute"
+    service_account_key = os.getenv("NBFORGE_SERVICE_ACCOUNT_KEY")
+    
+    # Get parameters from Airflow context
+    execution_date = context['execution_date']
+    
+    # Configure notebook execution
+    payload = {
+        "notebook_path": "finance/monthly_report.ipynb",
+        "parameters": {
+            "report_month": execution_date.strftime('%Y-%m'),
+            "include_charts": True
+        }
+    }
+    
+    # Execute notebook
+    response = requests.post(
+        api_url,
+        headers={
+            "Authorization": f"Bearer {service_account_key}",
+            "Content-Type": "application/json"
+        },
+        json=payload
+    )
+    
+    # Store execution ID for downstream tasks
+    execution_id = response.json()["execution_id"]
+    context['ti'].xcom_push(key='execution_id', value=execution_id)
+    
+    return execution_id
+
+# Define DAG
+with DAG(
+    'monthly_financial_report',
+    schedule_interval='@monthly',
+    start_date=datetime(2023, 1, 1),
+    catchup=False
+) as dag:
+    
+    run_report = PythonOperator(
+        task_id='run_financial_report',
+        python_callable=run_nbforge_notebook,
+        provide_context=True
+    )</code></pre>
+                        </div>
+                    </div>
+                </div>                
+                
+                <!-- Flexible Deployment -->
+                <div class="feature-card" id="deployment">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+                        </div>
+                        <h3>Flexible Deployment Options</h3>
+                    </div>
+                    <div class="feature-body">
+                        <div class="feature-description">
+                            <p>Deploy on major cloud providers (AWS, GCP) or on-premises, with Kubernetes orchestration for optimal resource utilization and scalability.</p>
+                            <ul>
+                                <li>Google Kubernetes Engine (GKE)</li>
+                                <li>Amazon Elastic Kubernetes Service (EKS)</li>
+                                <li>Self-hosted Kubernetes clusters</li>
+                            </ul>
+                        </div>
+                        <div class="feature-visual image-visual">
+                            <img src="images/cloud_platforms.png" alt="Deployment architecture across cloud providers" class="placeholder-image">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Email Notifications -->
+                <div class="feature-card" id="notifications">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                        </div>
+                        <h3>Email Notifications</h3>
+                    </div>
+                    <div class="feature-body">
+                        <div class="feature-description">
+                            <p>Receive timely email notifications when notebook executions complete or fail, allowing you to focus on other tasks while long-running processes execute.</p>
+                            <ul>
+                                <li>Customizable notification templates</li>
+                                <li>Execution status alerts (success, failure)</li>
+                                <li>Result links and execution summaries</li>
+                            </ul>
+                        </div>
+                        <div class="feature-visual image-visual">
+                            <img src="images/email_notifications.png" alt="Email notification with execution details" class="placeholder-image">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Shareable Reports -->
+                <div class="feature-card" id="reports">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+                        </div>
+                        <h3>Shareable HTML Reports</h3>
+                    </div>
+                    <div class="feature-body">
+                        <div class="feature-description">
+                            <p>Generate beautiful HTML reports from notebook outputs that can be easily shared with stakeholders, complete with interactive visualizations and formatted results.</p>
+                            <ul>
+                                <li>Interactive charts and dashboards</li>
+                                <li>Downloadable in multiple formats (HTML, Notebook with Input Parameters)</li>
+                            </ul>
+                        </div>
+                        <div class="feature-visual image-visual">
+                            <img src="images/notebook_report.png" alt="Interactive HTML report with charts and tables" class="placeholder-image">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Trustworthy Reports -->
+                <div class="feature-card" id="trustworthy">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        </div>
+                        <h3>Repeatable and Trustworthy Results</h3>
+                    </div>
+                    <div class="feature-body">
+                        <div class="feature-description">
+                            <p>Eliminate manual notebook modifications that lead to inconsistent results and errors. Every execution follows the same validated process, ensuring reliability and trust in your outputs.</p>
+                            <ul>
+                                <li>Version-controlled notebooks</li>
+                                <li>Reproducible environments</li>
+                                <li>Parameter history tracking</li>
+                            </ul>
+                        </div>
+                        <div class="feature-visual image-visual">
+                            <img src="images/execution_history.png" alt="Notebook execution history" class="placeholder-image">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick jump to other sections -->
+            <div class="section-navigation">
+                <div class="section-nav-item">
+                    <a href="#solutions">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                        Solutions
+                    </a>
+                </div>
+                <div class="section-nav-item">
+                    <a href="#contact">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                        Contact
+                    </a>
+                </div>
+                <div class="section-nav-item">
+                    <a href="https://github.com/lukewarm/nbforge">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                        GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <h2>Have Questions or Need Help?</h2>
+            <div class="contact-card">
+                <div class="contact-avatar">
+                    <img src="images/max.JPG" alt="Max He profile picture">
+                </div>
+                <div class="contact-info-content">
+                    <h2>Hi, I'm Max He</h2>
+                    <p>I made NBForge and would be happy to chat with you about implementing it for your data science team. Whether you have questions about deployment, integration with your existing systems, or customizing it for your specific needs, feel free to reach out.</p>
+                    
+                    <div class="contact-links">
+                        <a href="https://linkedin.com/in/maxhe" class="contact-link linkedin">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                            Connect on LinkedIn
+                        </a>
+                        <a href="#" id="contact-email" class="contact-link email" data-name="max" data-domain="example" data-tld="com">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                            Send an Email
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section cta-section">
+        <div class="container">
+            <h2>Start Using NBForge Today</h2>
+            <p>Transform how your organization uses Jupyter notebooks</p>
+            <div class="cta-buttons">
+                <a href="https://github.com/lukewarm/nbforge" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                    Get Started on GitHub
+                </a>
+                <a href="#" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M5 3l14 9-14 9V3z"></path></svg>
+                    Try Demo
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span class="logo-text">nbforge</span>
+                    <p>A flexible platform for running notebooks securely with parameter forms.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-links-column">
+                        <h4>Documentation</h4>
+                        <a href="https://github.com/lukewarm/nbforge/tree/main/docs/notebook_specification.md">Notebook Specification</a>
+                        <a href="https://github.com/lukewarm/nbforge/tree/main/docs/service-extensions">Service Extensions</a>
+                        <a href="https://github.com/lukewarm/nbforge/tree/main/docs/deployment">Deployment Guides</a>
+                    </div>
+                    <div class="footer-links-column">
+                        <h4>Community</h4>
+                        <a href="https://github.com/lukewarm/nbforge">GitHub</a>
+                        <a href="https://github.com/lukewarm/nbforge/issues">Issue Tracker</a>
+                        <a href="https://github.com/lukewarm/nbforge/discussions">Discussions</a>
+                    </div>
+                    <div class="footer-links-column">
+                        <h4>Resources</h4>
+                        <a href="https://github.com/lukewarm/nbforge/tree/main/docs">Documentation</a>
+                        <a href="https://github.com/lukewarm/nbforge/tree/main/docs/admin_guide.md">Admin Guide</a>
+                        <a href="https://github.com/lukewarm/nbforge/tree/main/docs/auth">Authentication Guide</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; <span id="current-year"></span> nbforge. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Add this modal overlay right before the closing body tag -->
+    <div id="image-modal" class="modal-overlay">
+        <div class="modal-content">
+            <img id="modal-image" src="" alt="Enlarged image">
+        </div>
+    </div>
+
+    <!-- highlight.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <!-- Additional languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+    
+    <script src="script.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set the current year for copyright
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+        
+        // Email obfuscation
+        const emailLink = document.getElementById('contact-email');
+        if (emailLink) {
+            const name = emailLink.getAttribute('data-name');
+            const domain = emailLink.getAttribute('data-domain');
+            const tld = emailLink.getAttribute('data-tld');
+            
+            const email = `${name}@${domain}.${tld}`;
+            emailLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = `mailto:${email}`;
+            });
+        }
+        
+        // Image lightbox functionality
+        const modal = document.getElementById('image-modal');
+        const modalImg = document.getElementById('modal-image');
+        
+        // Get all images in image-visual, solution-image, and hero-image containers
+        const clickableImages = document.querySelectorAll('.image-visual img, .solution-image img, .hero-image img');
+        
+        // Add click event to each image
+        clickableImages.forEach(img => {
+            img.addEventListener('click', function() {
+                modal.classList.add('active');
+                modalImg.src = this.src;
+                document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+            });
+        });
+        
+        // Close modal when clicking anywhere
+        modal.addEventListener('click', function() {
+            modal.classList.remove('active');
+            document.body.style.overflow = ''; // Restore scrolling
+        });
+        
+        // Close modal with escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                modal.classList.remove('active');
+                document.body.style.overflow = ''; // Restore scrolling
+            }
+        });
+        
+        // Initialize highlight.js
+        document.querySelectorAll('.code-visual pre code').forEach(block => {
+            // Ensure language classes are correctly set for highlight.js
+            const parent = block.closest('.code-visual');
+            if (parent) {
+                const langClass = block.className;
+                if (langClass && langClass.startsWith('language-')) {
+                    // Language class is already set
+                } else {
+                    // Try to determine language from context
+                    if (block.textContent.includes('import') || block.textContent.includes('def ')) {
+                        block.className = 'language-python';
+                    } else if (block.textContent.includes('curl')) {
+                        block.className = 'language-bash';
+                    } else if (block.textContent.includes('{') && block.textContent.includes('}')) {
+                        block.className = 'language-json';
+                    } else if (block.textContent.includes(':') && !block.textContent.includes('{')) {
+                        block.className = 'language-yaml';
+                    }
+                }
+            }
+            
+            // Initialize highlight.js on this block
+            hljs.highlightElement(block);
+        });
+        
+        // Enhanced active TOC item tracking and scrolling
+        const featureCards = document.querySelectorAll('.feature-card');
+        const tocLinks = document.querySelectorAll('.toc-nav a');
+        const tocNav = document.querySelector('.toc-nav ul');
+        
+        // Fix scroll behavior when clicking on TOC links
+        tocLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    // Get the current scroll position
+                    const currentScrollPos = window.scrollY;
+                    
+                    // Calculate offset to account for fixed header and TOC
+                    const headerOffset = 120; 
+                    const targetPosition = targetElement.getBoundingClientRect().top + currentScrollPos - headerOffset;
+                    
+                    // Scroll to the target position
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Update active state in TOC
+                    tocLinks.forEach(link => link.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Center this link in the TOC navigation
+                    const linkRect = this.getBoundingClientRect();
+                    const navRect = tocNav.getBoundingClientRect();
+                    const scrollLeft = this.offsetLeft - (navRect.width / 2) + (linkRect.width / 2);
+                    tocNav.scrollTo({
+                        left: scrollLeft,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        function updateActiveNavLink() {
+            const scrollPosition = window.scrollY + 200; // Add offset for header
+            
+            featureCards.forEach(card => {
+                const cardTop = card.offsetTop;
+                const cardBottom = cardTop + card.offsetHeight;
+                
+                if (scrollPosition >= cardTop && scrollPosition < cardBottom) {
+                    const id = card.getAttribute('id');
+                    
+                    tocLinks.forEach(link => {
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active');
+                            // Scroll the link into view in the navigation
+                            const linkRect = link.getBoundingClientRect();
+                            const navRect = tocNav.getBoundingClientRect();
+                            
+                            // Calculate the scroll position to center the active link
+                            const scrollLeft = link.offsetLeft - (navRect.width / 2) + (linkRect.width / 2);
+                            tocNav.scrollTo({
+                                left: scrollLeft,
+                                behavior: 'smooth'
+                            });
+                        } else {
+                            link.classList.remove('active');
+                        }
+                    });
+                }
+            });
+        }
+        
+        // Add scroll event listener
+        window.addEventListener('scroll', updateActiveNavLink);
+        
+        // Initialize the active TOC item
+        updateActiveNavLink();
+        
+        // Mobile menu toggle
+        const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        
+        if (mobileMenuToggle) {
+            mobileMenuToggle.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+            });
+        }
+    });
+    </script>
+    <style>
+    /* Navbar improvements */
+    .navbar {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        background: white;
+    }
+
+    .navbar .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 30px;
+        max-width: 1300px;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 25px;
+        align-items: center;
+    }
+
+    .nav-link {
+        font-weight: 500;
+        color: var(--text-color);
+        text-decoration: none;
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+    }
+
+    .nav-link:hover {
+        color: var(--primary-color);
+        background-color: rgba(var(--primary-rgb), 0.05);
+    }
+
+    .nav-link.cta {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 8px 20px;
+        border-radius: 8px;
+    }
+
+    .nav-link.cta:hover {
+        background-color: var(--primary-hover-color);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.25);
+    }
+
+    /* Floating Demo Button */
+    .floating-demo-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 99;
+    }
+
+    .btn-floating {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background-color: var(--primary-color);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 50px;
+        font-weight: 600;
+        box-shadow: 0 4px 20px rgba(var(--primary-rgb), 0.3);
+        transition: all 0.3s ease;
+        animation: pulse 2s infinite;
+    }
+
+    .btn-floating:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(var(--primary-rgb), 0.4);
+        animation: none;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+            box-shadow: 0 4px 20px rgba(var(--primary-rgb), 0.3);
+        }
+        50% {
+            transform: scale(1.05);
+            box-shadow: 0 4px 25px rgba(var(--primary-rgb), 0.5);
+        }
+        100% {
+            transform: scale(1);
+            box-shadow: 0 4px 20px rgba(var(--primary-rgb), 0.3);
+        }
+    }
+
+    /* Feature Section Improvements */
+    .features-toc {
+        position: sticky;
+        top: 70px;
+        z-index: 99;
+        margin-bottom: 40px;
+        background: white;
+        padding: 12px 0;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .toc-nav ul {
+        display: flex;
+        list-style: none;
+        margin: 0;
+        padding: 0 15px;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: var(--primary-color) #f0f0f0;
+        /* Hide scrollbar but keep functionality */
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .toc-nav ul::-webkit-scrollbar {
+        display: none;
+    }
+
+    .toc-nav li {
+        flex: 0 0 auto;
+        margin: 0 3px;
+    }
+
+    .toc-nav a {
+        display: block;
+        padding: 14px 20px;
+        color: var(--text-color);
+        text-decoration: none;
+        font-weight: 600;
+        white-space: nowrap;
+        border-radius: 8px;
+        transition: all 0.25s ease;
+    }
+
+    .toc-nav a:hover {
+        color: var(--primary-color);
+        background: rgba(var(--primary-rgb), 0.05);
+    }
+
+    .toc-nav a.active {
+        color: white;
+        background-color: var(--primary-color);
+        box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.25);
+    }
+
+    .feature-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        scroll-margin-top: 120px; /* Updated from 180px for better scrolling */
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    .feature-header {
+        display: flex;
+        align-items: center;
+        padding: 20px 25px; /* Reduced from 30px 35px */
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .feature-header::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 4px;
+        background: var(--primary-color);
+    }
+
+    .feature-icon {
+        margin-right: 15px; /* Reduced from 20px */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 45px; /* Reduced from 60px */
+        height: 45px; /* Reduced from 60px */
+        border-radius: 12px;
+        background: rgba(var(--primary-rgb), 0.1);
+        color: var(--primary-color);
+    }
+
+    .feature-header h3 {
+        margin: 0;
+        font-size: 1.5rem; /* Reduced from 1.8rem */
+        font-weight: 700;
+        color: var(--heading-color);
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+    }
+
+    .feature-body {
+        display: flex;
+        flex-direction: row;
+        padding: 35px;
+        gap: 30px;
+    }
+
+    .feature-description {
+        flex: 1;
+    }
+
+    .feature-description p {
+        margin-top: 0;
+        font-size: 1.1rem;
+        line-height: 1.7;
+        color: var(--text-color);
+    }
+
+    .feature-description ul {
+        padding-left: 22px;
+        margin-top: 20px;
+    }
+
+    .feature-description li {
+        margin-bottom: 12px;
+        position: relative;
+        font-size: 1.05rem;
+        line-height: 1.5;
+    }
+
+    .feature-visual {
+        flex: 1;
+        border-radius: 12px;
+        overflow: hidden;
+        max-width: 50%;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Code block styling */
+    .code-visual {
+        background-color: #282c34; /* atom-one-dark background color */
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .code-visual pre {
+        margin: 0;
+        padding: 25px;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        font-family: 'Fira Code', monospace !important;
+        font-size: 14px;
+        line-height: 1.6;
+        background-color: transparent !important;
+    }
+
+    .code-visual code {
+        font-family: 'Fira Code', monospace !important;
+        white-space: pre;
+        background: none !important;
+        padding: 0 !important;
+    }
+
+    /* Fix for highlight.js backgrounds */
+    .hljs {
+        background: transparent !important;
+        padding: 0 !important;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+        .navbar .container {
+            padding: 15px 20px;
+        }
+        
+        .nav-links {
+            gap: 5px;
+        }
+        
+        .nav-link {
+            padding: 8px 10px;
+            font-size: 0.9rem;
+        }
+        
+        .feature-body {
+            flex-direction: column;
+            padding: 25px;
+        }
+        
+        .feature-visual {
+            max-width: 100%;
+        }
+        
+        .floating-demo-btn {
+            bottom: 20px;
+            right: 20px;
+        }
+        
+        .btn-floating {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+        }
+    }
+
+    /* Mobile Navigation */
+    .mobile-menu-toggle {
+        display: none;
+        background: none;
+        border: none;
+        color: var(--text-color);
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+        .mobile-menu-toggle {
+            display: block;
+        }
+        
+        .nav-links {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: white;
+            flex-direction: column;
+            padding: 20px;
+            gap: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transform: translateY(-100%);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links.active {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .nav-link {
+            width: 100%;
+            text-align: center;
+        }
+    }
+
+    /* Remove section navigation */
+    .section-navigation {
+        display: none;
+    }
+
+    /* Solution section image improvements */
+    .solution-image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f8f9fa;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .solution-image img {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .solution-detail {
+        display: flex;
+        gap: 40px;
+        margin-bottom: 40px;
+    }
+
+    .solution-content {
+        flex: 1;
+    }
+
+    .solution-image {
+        flex: 1;
+        min-height: 300px;
+        padding: 20px;
+    }
+    
+    /* Responsive solution section */
+    @media (max-width: 992px) {
+        .solution-detail {
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        .solution-image {
+            min-height: 250px;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .solution-image {
+            min-height: 200px;
+            padding: 15px;
+        }
+        
+        .solution-detail {
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+    }
+    
+    /* Image Lightbox/Modal Styles */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.85);
+        z-index: 10000;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .modal-overlay.active {
+        display: flex;
+        opacity: 1;
+    }
+    
+    .modal-content {
+        max-width: 90vw;
+        max-height: 90vh;
+        padding: 20px;
+        position: relative;
+    }
+    
+    .modal-content img {
+        max-width: 100%;
+        max-height: 90vh;
+        display: block;
+        object-fit: contain;
+        box-shadow: 0 5px 35px rgba(0, 0, 0, 0.5);
+        border-radius: 8px;
+        transform: scale(0.9);
+        transition: transform 0.3s ease;
+    }
+    
+    .modal-overlay.active .modal-content img {
+        transform: scale(1);
+    }
+    
+    /* Style for clickable images */
+    .image-visual img, .solution-image img, .hero-image img {
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .image-visual img:hover, .solution-image img:hover, .hero-image img:hover {
+        transform: scale(1.02);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Hero image styling */
+    .hero-image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f8f9fa;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .hero-image img {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        border-radius: 8px;
+    }
+    </style>
+</body>
+</html> 

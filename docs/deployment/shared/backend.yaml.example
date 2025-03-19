@@ -1,0 +1,100 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+data:
+  ENV: "production"
+  API_PREFIX: "/api/v1"
+  CORS_ORIGINS: '["https://nbforge.example.com"]'
+  LOG_LEVEL: "INFO"
+  KUBERNETES_NAMESPACE: "default"
+  NOTEBOOK_RUNNER_IMAGE: "nbforge/notebook-runner:latest"
+  S3_NOTEBOOK_TEMPLATES_PREFIX: "notebooks"  # Prefix for notebook templates
+  DEFAULT_PYTHON_VERSION: "3.12"
+  DEFAULT_CPU_MILLI: "1000"
+  DEFAULT_MEMORY_MIB: "2048"
+  GLOBAL_EXECUTIONS_RATE_LIMIT: "100"  # Maximum number of executions per hour globally
+  DEMO_MODE: "false"
+  EMAILS_ENABLED: "true"
+  EMAIL_PROVIDER: "smtp"
+  EMAIL_FROM: "noreply@example.com"
+  EMAIL_FROM_NAME: "NBForge"
+  SMTP_HOST: "smtp.example.com"
+  SMTP_PORT: "587"
+  SMTP_USER: "user@example.com"
+  SMTP_TLS: "true"
+  FRONTEND_URL: "https://nbforge.example.com"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: backend-secrets
+type: Opaque
+data:
+  # These are placeholders - replace with your actual base64-encoded values
+  # echo -n "your-value" | base64
+  DATABASE_URL: cG9zdGdyZXNxbDovL3VzZXJuYW1lOnBhc3N3b3JkQHBvc3RncmVzcWwtaG9zdDo1NDMyL25iZm9yZ2U=
+  SECRET_KEY: eW91ci1qd3Qtc2VjcmV0
+  AWS_ACCESS_KEY_ID: eW91ci1hY2Nlc3Mta2V5
+  AWS_SECRET_ACCESS_KEY: eW91ci1zZWNyZXQta2V5
+  SMTP_PASSWORD: eW91ci1zbXRwLXBhc3N3b3Jk
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    app: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+      - name: backend
+        image: nbforge/backend:latest
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          allowPrivilegeEscalation: false
+        ports:
+        - containerPort: 8000
+        envFrom:
+        - configMapRef:
+            name: backend-config
+        - secretRef:
+            name: backend-secrets
+        readinessProbe:
+          httpGet:
+            path: /api/v1/health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: "1"
+            memory: "2Gi"
+          requests:
+            cpu: "250m"
+            memory: "1Gi"
+            ephemeral-storage: "2Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: backend
+  ports:
+  - port: 8000
+    targetPort: 8000
+  type: ClusterIP 
