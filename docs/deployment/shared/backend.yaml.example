@@ -4,17 +4,21 @@ metadata:
   name: backend-config
 data:
   ENV: "production"
-  API_PREFIX: "/api/v1"
+  FRONTEND_URL: "https://nbforge.example.com"  
   CORS_ORIGINS: '["https://nbforge.example.com"]'
+  API_URL: "http://backend-service:8000/api/v1"
   LOG_LEVEL: "INFO"
   KUBERNETES_NAMESPACE: "default"
   NOTEBOOK_RUNNER_IMAGE: "nbforge/notebook-runner:latest"
+  S3_BUCKET: "nbforge"
+  S3_ENDPOINT_URL: "https://storage.example.com"
   S3_NOTEBOOK_TEMPLATES_PREFIX: "notebooks"  # Prefix for notebook templates
-  DEFAULT_PYTHON_VERSION: "3.12"
+  DEFAULT_PYTHON_VERSION: "3.10"
   DEFAULT_CPU_MILLI: "1000"
   DEFAULT_MEMORY_MIB: "2048"
   GLOBAL_EXECUTIONS_RATE_LIMIT: "100"  # Maximum number of executions per hour globally
   DEMO_MODE: "false"
+  DEMO_USER: "demo@example.com"  # Only needed if DEMO_MODE is "true"
   EMAILS_ENABLED: "true"
   EMAIL_PROVIDER: "smtp"
   EMAIL_FROM: "noreply@example.com"
@@ -23,7 +27,6 @@ data:
   SMTP_PORT: "587"
   SMTP_USER: "user@example.com"
   SMTP_TLS: "true"
-  FRONTEND_URL: "https://nbforge.example.com"
 ---
 apiVersion: v1
 kind: Secret
@@ -83,8 +86,8 @@ spec:
             cpu: "1"
             memory: "2Gi"
           requests:
-            cpu: "250m"
-            memory: "1Gi"
+            cpu: "200m"
+            memory: "512Mi"
             ephemeral-storage: "2Gi"
 ---
 apiVersion: v1

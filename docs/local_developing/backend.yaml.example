@@ -6,6 +6,7 @@ data:
   ENV: "production"
   FRONTEND_URL: "http://nbforge.local"
   API_URL: "http://backend-service:8000/api/v1"
+  CORS_ORIGINS: '["http://nbforge.local"]'
   S3_BUCKET: "nbforge"
   S3_ENDPOINT_URL: "http://host.minikube.internal:9000"
   S3_NOTEBOOK_TEMPLATES_PREFIX: "notebooks"  # Prefix for notebook templates
@@ -30,10 +31,10 @@ data:
   # These are placeholders - users will replace with their actual values
   # echo -n "your-value" | base64
   DATABASE_URL: cG9zdGdyZXNxbDovL25iZm9yZ2U6bmJmb3JnZUBob3N0Lm1pbmlrdWJlLmludGVybmFsOjU0MzIvbmJmb3JnZQ== 
-  SECRET_KEY: ZGV2LWp3dC1zZWNyZXQta2V5  # dev-jwt-secret-key
+  SECRET_KEY: Zm5OUUJ0WTlBNXF5UXpTWTFZbXlVRjNUVVNKeU1NU3d5TDJSWWFMaVR2NA==  # Replace with your own secret key
   AWS_ACCESS_KEY_ID: bWluaW9hZG1pbg==  # minioadmin
   AWS_SECRET_ACCESS_KEY: bWluaW9hZG1pbg==  # minioadmin
-  SMTP_PASSWORD: eW91ci12YWx1ZQ==
+  SMTP_PASSWORD: eW91ci1zbXRwLXBhc3N3b3Jk  # Replace with your own SMTP password
 ---
 apiVersion: apps/v1
 kind: Deployment
