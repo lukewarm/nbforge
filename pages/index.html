@@ -811,14 +811,32 @@ with DAG(
                 
                 // Ensure the container keeps its dimensions
                 const videoContainer = document.querySelector('.video-container');
-                videoContainer.style.height = `${containerHeight}px`;
-                videoContainer.style.width = `${containerWidth}px`;
                 
-                // Size the iframe properly
-                embedContainer.style.height = `${containerHeight}px`;
-                embedContainer.style.width = `${containerWidth}px`;
-                iframe.style.height = `${containerHeight}px`;
-                iframe.style.width = `${containerWidth}px`;
+                // Check if mobile view
+                if (window.innerWidth <= 768) {
+                    // For mobile, use aspect ratio approach
+                    videoContainer.style.height = '0';
+                    videoContainer.style.paddingBottom = '56.25%'; // 16:9 aspect ratio
+                } else {
+                    // For desktop, keep explicit dimensions
+                    videoContainer.style.height = `${containerHeight}px`;
+                    videoContainer.style.width = `${containerWidth}px`;
+                }
+                
+                // Size the iframe appropriately for the device
+                if (window.innerWidth <= 768) {
+                    // In mobile, let the container control sizing via positioning
+                    embedContainer.style.height = '100%';
+                    embedContainer.style.width = '100%';
+                    iframe.style.height = '100%';
+                    iframe.style.width = '100%';
+                } else {
+                    // In desktop, use explicit dimensions
+                    embedContainer.style.height = `${containerHeight}px`;
+                    embedContainer.style.width = `${containerWidth}px`;
+                    iframe.style.height = `${containerHeight}px`;
+                    iframe.style.width = `${containerWidth}px`;
+                }
             }
             
             // Click to play immediately
@@ -1598,17 +1616,13 @@ with DAG(
             height: auto;
         }
         
-        .youtube-iframe {
-            min-height: 200px;
-            height: 100%;
-            position: absolute;
-        }
-        
         .video-container {
             min-height: 200px;
             height: 0;
             padding-bottom: 56.25%; /* 16:9 aspect ratio */
             position: relative;
+            margin-bottom: 20px; /* Add space below */
+            width: 100%;
         }
         
         .video-preview {
@@ -1617,6 +1631,33 @@ with DAG(
             left: 0;
             height: 100%;
             width: 100%;
+        }
+        
+        .youtube-embed-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .youtube-iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100% !important;
+            height: 100% !important;
+            min-height: 0;
+        }
+        
+        /* Fix for hero section layout on mobile */
+        .hero-content {
+            flex-direction: column;
+        }
+        
+        .hero-image {
+            width: 100%;
+            margin-top: 20px;
         }
     }
 
