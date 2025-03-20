@@ -62,18 +62,33 @@
                     </div>
                 </div>
                 <div class="hero-image">
-                    <a href="https://youtu.be/escH5n10WNk" target="_blank" class="video-link">
-                        <img src="images/hero_image.png" alt="NBForge dashboard interface" class="placeholder-image">
-                        <div class="video-overlay">
-                            <div class="play-button">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="white" stroke="white" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="10" fill="rgba(0,0,0,0.6)"></circle>
-                                    <polygon points="10 8 16 12 10 16 10 8" fill="white"></polygon>
-                                </svg>
-                                <span class="video-duration">Watch Demo (9:26)</span>
+                    <div class="video-container">
+                        <div class="video-preview" data-youtube-id="escH5n10WNk">
+                            <img src="images/hero_image.png" alt="NBForge dashboard interface" class="preview-image">
+                            <div class="play-overlay">
+                                <div class="play-button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="white" stroke="white" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10" fill="rgba(0,0,0,0.6)"></circle>
+                                        <polygon points="10 8 16 12 10 16 10 8" fill="white"></polygon>
+                                    </svg>
+                                    <span class="video-duration">Watch Demo (3:24)</span>
+                                </div>
+                                <div class="countdown-container">
+                                    <div class="countdown-ring">
+                                        <svg class="countdown-circle" width="70" height="70" viewBox="0 0 70 70">
+                                            <circle class="countdown-circle-bg" cx="35" cy="35" r="32" fill="none" stroke="rgba(255, 255, 255, 0.3)" stroke-width="4"></circle>
+                                            <circle class="countdown-circle-progress" cx="35" cy="35" r="32" fill="none" stroke="white" stroke-width="4" stroke-dasharray="201" stroke-dashoffset="201" transform="rotate(-90 35 35)"></circle>
+                                        </svg>
+                                        <span class="countdown-number">3</span>
+                                    </div>
+                                    <div class="countdown-text">Autoplay in</div>
+                                </div>
                             </div>
                         </div>
-                    </a>
+                        <div class="youtube-embed-container">
+                            <iframe class="youtube-iframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -760,6 +775,118 @@ with DAG(
                 }
             });
         }
+        
+        // YouTube video embed with autoplay functionality
+        const videoPreview = document.querySelector('.video-preview');
+        
+        if (videoPreview) {
+            const youtubeId = videoPreview.getAttribute('data-youtube-id');
+            const iframe = document.querySelector('.youtube-iframe');
+            const embedContainer = document.querySelector('.youtube-embed-container');
+            const countdownContainer = document.querySelector('.countdown-container');
+            const countdownCircle = document.querySelector('.countdown-circle-progress');
+            const countdownNumber = document.querySelector('.countdown-number');
+            const playOverlay = document.querySelector('.play-overlay');
+            
+            // Function to play the video
+            function playVideo() {
+                // Set the YouTube embed URL with autoplay
+                iframe.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1`;
+                
+                // Show the embed container
+                embedContainer.classList.add('active');
+                
+                // Hide the preview
+                videoPreview.style.display = 'none';
+                
+                // Reset countdown if it was active
+                if (countdownContainer.classList.contains('active')) {
+                    countdownContainer.classList.remove('active');
+                    playOverlay.classList.remove('countdown-active');
+                }
+            }
+            
+            // Click to play immediately
+            videoPreview.addEventListener('click', function() {
+                // If countdown is active, just play the video
+                if (countdownContainer.classList.contains('active')) {
+                    playVideo();
+                } else {
+                    // Otherwise, normal click-to-play behavior
+                    playVideo();
+                }
+            });
+            
+            // Set up IntersectionObserver for autoplay after 3 seconds in viewport
+            let autoplayTimeout;
+            let countdownInterval;
+            let secondsLeft = 3;
+            
+            // Calculate the circumference of the circle
+            const circleRadius = 32;
+            const circumference = 2 * Math.PI * circleRadius;
+            
+            // Function to update countdown UI
+            function updateCountdown() {
+                countdownNumber.textContent = secondsLeft;
+                
+                // Update the circle progress
+                const offset = circumference - (secondsLeft / 3) * circumference;
+                countdownCircle.style.strokeDashoffset = offset;
+                
+                secondsLeft -= 1;
+                
+                if (secondsLeft < 0) {
+                    clearInterval(countdownInterval);
+                    playVideo();
+                }
+            }
+            
+            // Function to start countdown
+            function startCountdown() {
+                // Reset countdown
+                secondsLeft = 3;
+                countdownNumber.textContent = '3';
+                countdownCircle.style.strokeDashoffset = circumference;
+                
+                // Show countdown
+                countdownContainer.classList.add('active');
+                playOverlay.classList.add('countdown-active');
+                
+                // Start the countdown
+                updateCountdown();
+                countdownInterval = setInterval(updateCountdown, 1000);
+            }
+            
+            // Function to stop countdown
+            function stopCountdown() {
+                clearTimeout(autoplayTimeout);
+                clearInterval(countdownInterval);
+                countdownContainer.classList.remove('active');
+                playOverlay.classList.remove('countdown-active');
+            }
+            
+            // Set up IntersectionObserver
+            const observer = new IntersectionObserver((entries) => {
+                const [entry] = entries;
+                
+                if (entry.isIntersecting) {
+                    // When video enters viewport, start timer for autoplay
+                    autoplayTimeout = setTimeout(() => {
+                        startCountdown();
+                    }, 3000); // Wait 3 seconds before showing countdown
+                } else {
+                    // When video leaves viewport, clear timeout and stop countdown
+                    stopCountdown();
+                }
+            }, {
+                root: null,
+                threshold: 0.7, // Video must be 70% visible
+            });
+            
+            // Start observing the video preview
+            observer.observe(videoPreview);
+        }
     });
     </script>
     <style>
@@ -1335,6 +1462,181 @@ with DAG(
     .video-link:hover .video-duration {
         transform: translateY(0);
         opacity: 1;
+    }
+
+    /* Responsive Image Fixes */
+    .image-visual img, .solution-image img, .feature-visual img, .hero-image img, .placeholder-image {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        border-radius: 8px;
+    }
+    
+    /* YouTube Video Embed Styling */
+    .video-container {
+        width: 100%;
+        height: 100%;
+        border-radius: 12px;
+        overflow: hidden;
+        position: relative;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .video-preview {
+        cursor: pointer;
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background-color: #f8f9fa;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.3s ease;
+    }
+    
+    .video-preview:hover {
+        transform: scale(1.02);
+    }
+    
+    .preview-image {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+    }
+    
+    .play-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.2);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.3s ease;
+    }
+    
+    .video-preview:hover .play-overlay {
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+    
+    .play-button {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.3s ease;
+    }
+    
+    .video-preview:hover .play-button {
+        transform: scale(1.1);
+    }
+    
+    .video-duration {
+        margin-top: 10px;
+        padding: 6px 12px;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 14px;
+    }
+    
+    .youtube-embed-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: none;
+    }
+    
+    .youtube-embed-container.active {
+        display: block;
+    }
+    
+    .youtube-iframe {
+        width: 100%;
+        height: 100%;
+        min-height: 300px;
+    }
+    
+    /* Responsive adjustments for images */
+    @media (max-width: 768px) {
+        .feature-visual, .solution-image, .hero-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-height: none;
+            height: auto;
+        }
+        
+        .youtube-iframe {
+            min-height: 200px;
+        }
+    }
+
+    /* Countdown styling */
+    .countdown-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        pointer-events: none;
+    }
+    
+    .countdown-container.active {
+        opacity: 1;
+    }
+    
+    .countdown-ring {
+        position: relative;
+        width: 70px;
+        height: 70px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .countdown-circle {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    
+    .countdown-circle-progress {
+        transition: stroke-dashoffset 1s linear;
+    }
+    
+    .countdown-number {
+        font-size: 28px;
+        font-weight: bold;
+        color: white;
+    }
+    
+    .countdown-text {
+        margin-top: 10px;
+        color: white;
+        font-size: 14px;
+        font-weight: 500;
+    }
+    
+    .play-button {
+        transition: opacity 0.3s ease;
+    }
+    
+    .countdown-active .play-button {
+        opacity: 0.3;
     }
     </style>
 </body>
