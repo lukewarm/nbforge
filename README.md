@@ -80,12 +80,16 @@ For production environments, we provide Kubernetes manifests for deploying NBFor
 
 ## Documentation
 
-- [Admin Guide](docs/admin_guide.md)
-- [Notebook Specification](docs/notebook_specification.md)
-- [Service Account Management](docs/service_accounts.md)
-- [Authentication](docs/auth/README.md)
-- [Service Extensions](docs/service-extensions/README.md)
 - [Deployment Options](docs/deployment/README.md)
+- [Notebook Specification](docs/notebook_specification.md)
+- [Admin Guide](docs/admin_guide.md)
+    - [Service Account Management](docs/service_accounts.md)
+- Authentication
+    - [Okta](docs/auth/okta-integration.md)
+    - [Google OAuth](docs/auth/google-oauth-integration.md)
+- Service Extensions
+    - [Extend to other storage providers](docs/service-extensions/storage.md)
+    - [Extending to email api providers](docs/service-extensions/email.md)
 
 ## Architecture
 
