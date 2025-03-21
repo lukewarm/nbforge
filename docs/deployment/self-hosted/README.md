@@ -1,6 +1,6 @@
 # NBForge Self-Hosted Deployment Guide
 
-This guide explains how to deploy NBForge on a self-hosted Kubernetes cluster and set up the required services.
+This guide explains how to deploy NBForge on a self-hosted Kubernetes cluster and set up the required services. 
 
 ## Prerequisites
 
@@ -15,7 +15,7 @@ For self-hosted deployments, you'll need to set up RBAC permissions for the serv
 
 1. Apply the RBAC configuration:
 ```bash
-kubectl apply -f rbac.yaml
+kubectl apply -f ..shared/rbac.yaml
 ```
 
 2. Verify the permissions:
@@ -42,7 +42,7 @@ GRANT ALL PRIVILEGES ON DATABASE nbforge TO nbforge;
 psql -h YOUR_POSTGRES_HOST -U nbforge -d nbforge -c "SELECT version();"
 ```
 
-3. Update the `backend-secrets` in `backend.yaml`:
+3. Copy `../shared/backend.yaml.example` to `../shared/backend.yaml` and update `backend-config` and `backend-secrets`:
 ```yaml
 DATABASE_URL: "postgresql://nbforge:YOUR_PASSWORD@your-postgres-host:5432/nbforge"
 SECRET_KEY: <base64-encoded-secret-key>
@@ -73,7 +73,7 @@ export POSTGRES_PASSWORD=$(kubectl get secret --namespace default nbforge-db-pos
 echo $POSTGRES_PASSWORD
 ```
 
-3. Update the `backend-secrets` in `backend.yaml`:
+3. Copy `../shared/backend.yaml.example` to `../shared/backend.yaml` and update `backend-config` and `backend-secrets`:
 ```yaml
 DATABASE_URL: "postgresql://nbforge:YOUR_PASSWORD@nbforge-db-postgresql:5432/nbforge"
 SECRET_KEY: <base64-encoded-secret-key>
@@ -207,6 +207,9 @@ EOF
 ```
 
 ### Configure SSL/TLS
+
+It is likely that your organization already has a standard practice of exposoing Kubernetes services on the intranet.
+Follow that instruction instead if there's one.
 
 1. Install cert-manager for automated SSL certificates (recommended for production):
 ```bash
@@ -368,6 +371,10 @@ kubectl get ingress
 
 ### Step 6: Configure DNS
 
+It is likely that your organization already has a standard practice of exposoing Kubernetes services on the intranet.
+Follow that instruction instead if there's one.
+
+
 1. **Get the external IP address:**
 ```bash
 # Get the external IP of the ingress controller
@@ -417,7 +424,7 @@ After creating the admin account, you can:
 2. Log in with your admin credentials
 3. Access the admin panel at https://nbforge.example.com/#/admin/users
 
-### Step 8: Security Improvements and Monitoring
+### Step 8: Security Improvements by Using Different Service Accounts for Each Service
 
 1. **Use dedicated service accounts for different components:**
 ```bash
@@ -427,7 +434,7 @@ kubectl create serviceaccount frontend-sa
 kubectl create serviceaccount notebook-runner-sa
 
 # Apply more granular RBAC
-kubectl apply -f fine-grained-rbac.yaml
+kubectl apply -f fine-grained-rbac.yaml  # create this file yourself
 ```
 
 2. **Update deployments to use these service accounts:**
@@ -436,45 +443,3 @@ kubectl apply -f fine-grained-rbac.yaml
 kubectl patch deployment backend -p '{"spec":{"template":{"spec":{"serviceAccountName":"backend-sa"}}}}'
 kubectl patch deployment frontend -p '{"spec":{"template":{"spec":{"serviceAccountName":"frontend-sa"}}}}'
 ```
-
-3. **Set up network policies to limit pod communications:**
-```bash
-kubectl apply -f network-policies.yaml
-```
-
-4. **Set up monitoring with Prometheus and Grafana (optional):**
-```bash
-# Add Prometheus Helm repo
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm repo update
-
-# Install kube-prometheus-stack for monitoring
-helm install monitoring prometheus-community/kube-prometheus-stack \
-  --namespace monitoring \
-  --create-namespace \
-  --set grafana.adminPassword=YOUR_ADMIN_PASSWORD
-```
-
-5. **Access Grafana for monitoring:**
-```bash
-# Port-forward the Grafana service
-kubectl port-forward -n monitoring svc/monitoring-grafana 3000:80
-```
-
-Then navigate to `http://localhost:3000` in your browser and log in with:
-- Username: admin
-- Password: YOUR_ADMIN_PASSWORD
-
-### Troubleshooting
-
-- **Issue**: Pods fail to start or stay in pending state
-  - **Solution**: Check pod events and logs with `kubectl describe pod <pod-name>` and `kubectl logs <pod-name>`
-  - **Solution**: Verify that your cluster has sufficient resources with `kubectl describe nodes`
-
-- **Issue**: Ingress not working
-  - **Solution**: Check ingress controller logs with `kubectl logs -l app.kubernetes.io/name=ingress-nginx -n ingress-nginx`
-  - **Solution**: Verify that the ingress definition is correct with `kubectl describe ingress nbforge-ingress`
-
-- **Issue**: Cannot access the application
-  - **Solution**: Check if DNS resolves to the correct IP with `nslookup nbforge.example.com`
-  - **Solution**: Verify that TLS is properly configured with `curl -vk https://nbforge.example.com`

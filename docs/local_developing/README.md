@@ -14,7 +14,7 @@ When developing locally, you'll need the following components:
 
 You have two options for development:
 - **Option 1**: Run PostgreSQL, MinIO, backend and frontend directly on your host (simplest for getting started)
-- **Option 2**: Run PostgreSQL and MinIO on your host, and both backend and frontend in Minikube with Ingress (for testing the complete Kubernetes deployment)
+- **Option 2**: Run PostgreSQL and MinIO on your host, and both backend and frontend in Minikube with Ingress. You must use this option for testing the complete Kubernetes deployment, including **executing notebooks**.
 
 ## Prerequisites
 
@@ -25,6 +25,8 @@ You have two options for development:
 - Git
 - Minikube (for Option 2)
 - kubectl (for Option 2)
+
+All these can be installed using `brew` on Macs.
 
 ## Option 1: Direct Local Development
 
@@ -82,20 +84,8 @@ pyenv activate nbforge-env
 # Install dependencies
 pip install -r requirements.txt
 
-# Create a .env file
-cat > .env << EOF
-API_URL=http://localhost:8000/api/v1
-DATABASE_URL=postgresql://nbforge:nbforge@localhost:5432/nbforge
-S3_ENDPOINT=http://localhost:9000
-AWS_ACCESS_KEY_ID=minioadmin
-AWS_SECRET_ACCESS_KEY=minioadmin
-S3_BUCKET=nbforge
-SECRET_KEY=dev-secret-key-for-local-testing-only
-ENV=development
-API_PREFIX=/api/v1
-LOG_LEVEL=DEBUG
-CORS_ORIGINS=http://localhost:8080
-EOF
+# Copy `.env.example` to `.env` and make necessary adjustment
+cp .env.example .env
 
 # Run database migrations
 alembic upgrade head
@@ -112,11 +102,8 @@ cd frontend
 # Install dependencies
 npm install
 
-# Create a .env file
-cat > .env.local << EOF
-VUE_APP_API_URL=http://localhost:8000
-VUE_APP_TITLE=NBForge (Local)
-EOF
+# Copy `.env.example` to `.env` and make necessary adjustment
+cp .env.example .env
 
 # Start the development server
 npm run dev
@@ -154,6 +141,8 @@ Follow Steps 1 and 2 from Option 1 to set up PostgreSQL and MinIO.
 ### Step 2: Start Minikube with Ingress
 
 ```bash
+# install minikube with `brew install minikube`
+
 # Start Minikube with enough resources and enable the ingress addon
 minikube start --cpus 4 --memory 8192
 
@@ -165,10 +154,10 @@ echo "$(minikube ip) host.minikube.internal" | sudo tee -a /etc/hosts
 echo 127.0.0.1 nbforge.local" | sudo tee -a /etc/hosts
 ```
 
-**Important**: before proceeding to the next steps, run this command to this command sets up your shell so that any Docker commands you run will interact 
-with the Docker daemon inside Minikube.
+**Important**: before proceeding to the next steps, run this command to this command sets up your shell so that any Docker commands you run will interact with the Docker daemon inside Minikube.
 
-Note that the PostgreSQL and MinIO containers on run on your laptop's Docker engine - the one you usually use for building and running containers locally. 
+Note that the PostgreSQL and MinIO containers on run on your laptop's Docker engine - the one you usually use for building and running containers locally. (We can also run both inside of Minikube, which may be a cleaner solution. If you choose to do that, change the service url in the yaml files.)
+
 The NBForge web app conterians run inside Minikube, which provides a small Kubernetes cluster on your machine. 
 This setup lets you test parts of the app in a full Kubernetes environment while still using your regular Docker for database and storage services.
 
@@ -200,13 +189,31 @@ docker build -t nbforge/notebook-runner:latest .
 
 ### Step 4: Deploy Backend and Frontend to Minikube
 
+First copy `backend.yaml.example` to `backend.yaml`
+
+```bash
+cp backend.yaml.example backend.yaml
+```
+
+Make sure that you never commit any secretes into source control.
+
+We now need to update the yaml files in this folder to match your settings, specifically the secrets.
+
+Run the command below to get the base64 encoded string of the secrets, which you should enter into the yaml files.
+
 ```bash
 # Update the secrets in backend.yaml with your encoded values
 cd /path/to/nbforge/deployment_new/local
 echo -n "postgresql://nbforge:nbforge@host.minikube.internal:5432/nbforge" | base64
 echo -n "minioadmin" | base64  # For MinIO credentials
-echo -n "dev-secret-key" | base64
+echo -n "dev-secret-key" | base64  # replace with your own value
+echo -n "your-smtp-email-server-password" | base64  # optionally with the email set up
+```
 
+Edit the `backend.yaml` file and carefully review them. The config and secrets sections set the env variables for the servers. 
+(They replace the roles of the .env files in this set up.)
+
+```bash
 # Deploy the backend and frontend
 kubectl apply -f backend.yaml
 kubectl apply -f frontend.yaml
@@ -218,9 +225,10 @@ kubectl wait --for=condition=available deployment/backend --timeout=120s
 kubectl wait --for=condition=available deployment/frontend --timeout=120s
 ```
 
-To see the status and logs of the Minikube cluster, you could use the Minikube Dashboard by running
+To see the status and logs of the Minikube cluster to monitor and to debug, 
+it is highly recommended that you could use the Minikube Dashboard by running
 
-```
+```bash
 minikube dashboard
 ```
 

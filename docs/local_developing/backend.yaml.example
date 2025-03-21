@@ -13,11 +13,11 @@ data:
   DEMO_MODE: "false"
   EMAILS_ENABLED: "true"
   EMAIL_PROVIDER: "smtp"
-  EMAIL_FROM: "accounts@mail.maxhe.org"
+  EMAIL_FROM: "your-account@example.com"
   EMAIL_FROM_NAME: "NBForge"
-  SMTP_HOST: "smtp.mailgun.org"
+  SMTP_HOST: "smtp.example.com"
   SMTP_PORT: "587"
-  SMTP_USER: "accounts@mail.maxhe.org"
+  SMTP_USER: "our-account@example.com"
   SMTP_TLS: "true"
   KUBERNETES_NAMESPACE: "default"  # The namespace where notebook jobs will be created
   GLOBAL_EXECUTIONS_RATE_LIMIT: "100"  # Maximum number of executions per hour globally

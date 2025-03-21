@@ -8,7 +8,7 @@ This guide explains how to deploy NBForge on Amazon Elastic Kubernetes Service (
 - AWS CLI installed and configured
 - `eksctl` CLI installed
 - `kubectl` installed and configured
-- `helm` CLI installed (for PostgreSQL and MinIO deployments)
+- `helm` CLI installed (optionally for deploying PostgreSQL and MinIO in the EKS cluster)
 
 Login and set the default AWS profile
 ```bash
@@ -122,7 +122,7 @@ PGPASSWORD=YOUR_PASSWORD psql \
   -c "CREATE DATABASE nbforge;"
 ```
 
-5. Update the `backend-secrets` in `backend.yaml`:
+5.Copy `../shared/backend.yaml.example` to `../shared/backend.yaml` and update its `backend-secrets` section:
 ```yaml
 DATABASE_URL: "postgresql://nbforge:YOUR_PASSWORD@$RDS_ENDPOINT:5432/nbforge"
 SECRET_KEY: <base64-encoded-secret-key>
@@ -153,7 +153,7 @@ export POSTGRES_PASSWORD=$(kubectl get secret --namespace default nbforge-db-pos
 echo $POSTGRES_PASSWORD
 ```
 
-3. Update the `backend-secrets` in `backend.yaml`:
+3. Copy `../shared/backend.yaml.example` to `../shared/backend.yaml` and update its `backend-secrets` section::
 ```yaml
 DATABASE_URL: "postgresql://nbforge:YOUR_PASSWORD@nbforge-db-postgresql:5432/nbforge"
 SECRET_KEY: <base64-encoded-secret-key>
@@ -179,7 +179,7 @@ aws s3api create-bucket \
 ```bash
 aws iam create-user --user-name nbforge-storage
 
-# Create access keys
+# Create access keys (make sure to generate HMAC key)
 aws iam create-access-key --user-name nbforge-storage > nbforge-credentials.json
 cat nbforge-credentials.json
 ```
@@ -223,7 +223,7 @@ AWS_ACCESS_KEY_ID: <base64-encoded-access-key-id>
 AWS_SECRET_ACCESS_KEY: <base64-encoded-secret-access-key>
 ```
 
-### Option 2: In-Cluster MinIO
+### Option 2: In-Cluster MinIO 
 
 If you prefer running S3-compatible storage in the cluster:
 
@@ -557,5 +557,5 @@ aws eks update-cluster-config \
 4. **Set up Security Policies:**
 ```bash
 # Apply pod security policies
-kubectl apply -f pod-security-policies.yaml
+kubectl apply -f pod-security-policies.yaml  # create this policy yourself following the best practice
 ```
