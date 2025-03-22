@@ -18,8 +18,9 @@ You have two options for development:
 
 ## Prerequisites
 
-- Docker
-- Python 3.10 or later with pyenv or Anaconda
+- Docker (Note: `brew install docker` will only install the Docker engine, which requires Docker-Machine and VirtualBox to run on Mac. For the newer Docker for Mac, which does not require VirtualBox, use Homebrew's Cask: `brew install --cask docker`)
+- Python 3.10 or later with Anaconda
+- pyenv and pyenv-virtualenv (Note: `pyenv` needs to be installed separately and does not come with Python 3.10)
 - Node.js 16 or later
 - npm or yarn
 - Git
@@ -76,6 +77,23 @@ After MinIO starts:
 ```bash
 cd backend
 
+# If this is the first time using pyenv, update your ~/.zshrc file with pyenv configurations
+# Skip if this was set up already
+cat << 'EOF' >> ~/.zshrc
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+EOF
+
+# Restart your shell or run `source ~/.zshrc` to apply changes
+
+# Install Python 3.10.0 using pyenv
+pyenv install 3.10.0
+
 # Create a virtual environment with pyenv or Anaconda
 pyenv virtualenv 3.10.0 nbforge-env
 pyenv activate nbforge-env
@@ -115,11 +133,17 @@ After starting both the backend and frontend, you need to create the first admin
 
 **Using the create_superuser.py script:**
 ```bash
+# Go to the backend folder
+cd backend
+
+# Set the PYTHONPATH to the current directory
+export PYTHONPATH=$(pwd)
+
 # Option 1: Create a new admin user (requires password)
-python backend/scripts/create_superuser.py admin@example.com your_secure_password
+python scripts/create_superuser.py admin@example.com your_secure_password
 
 # Option 2: Make an existing user an admin (no password needed)
-python backend/scripts/create_superuser.py existing_user@example.com
+python scripts/create_superuser.py existing_user@example.com
 ```
 
 After creating the admin account, you can:
