@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: backend-config
 data:
-  ENV: "production"
+  ENV: "development"
   FRONTEND_URL: "http://nbforge.local"
   API_URL: "http://backend-service:8000/api/v1"
   CORS_ORIGINS: '["http://nbforge.local"]'
