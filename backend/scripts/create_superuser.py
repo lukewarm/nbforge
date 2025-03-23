@@ -6,7 +6,10 @@ Usage: python -m backend.scripts.create_superuser <email>
 
 import sys
 import logging
+from dotenv import load_dotenv
 from sqlalchemy.orm import Session
+
+load_dotenv()
 
 from app.db.session import SessionLocal
 from app.core.config import get_settings
