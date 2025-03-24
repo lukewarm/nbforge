@@ -134,10 +134,10 @@ After starting both the backend and frontend, you need to create the first admin
 **Using the create_superuser.py script:**
 ```bash
 # Option 1: Create a new admin user (requires password)
-python backend/scripts/create_superuser.py admin@example.com your_secure_password
+PYTHONPATH=$PYTHONPATH:backend python backend/scripts/create_superuser.py admin@example.com your_secure_password
 
 # Option 2: Make an existing user an admin (no password needed)
-python backend/scripts/create_superuser.py existing_user@example.com
+PYTHONPATH=$PYTHONPATH:backend python backend/scripts/create_superuser.py existing_user@example.com
 ```
 
 After creating the admin account, you can:
